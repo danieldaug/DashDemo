@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3 uid="uid://rfvavlandg72"]
+
+[ext_resource type="Script" uid="uid://dcgrlb1dy4qup" path="res://crab/crab_bubble.gd" id="1_htf58"]
+[ext_resource type="Texture2D" uid="uid://b8ac77fkly3ec" path="res://crab/CrabBubbleSheet.png" id="1_sfif3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htf58"]
+atlas = ExtResource("1_sfif3")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0dl1"]
+atlas = ExtResource("1_sfif3")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dd82u"]
+atlas = ExtResource("1_sfif3")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xmtru"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htf58")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0dl1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dd82u")
+}],
+"loop": false,
+"name": &"pop",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j0dl1"]
+radius = 4.0
+
+[node name="CrabBubble" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_htf58")
+sprite = NodePath("AnimatedSprite2D")
+expansion_rate = 100.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 3
+sprite_frames = SubResource("SpriteFrames_xmtru")
+autoplay = "default"
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_j0dl1")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
