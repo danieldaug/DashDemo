@@ -12,11 +12,13 @@ var dashing: bool: set = dash_change
 var dash_collision: bool = false
 var dash_dir: Vector2
 var dash_collision_timer: Timer = Timer.new()
+var last_spawn: Vector2 = Vector2(0, 0)
 
 # Constants
 const DASH_COLLISION_DELAY: float = 0.2
 
 func _ready():
+    Global.player = self
     dashing = false
     dash_collision_timer.one_shot = true
     dash_collision_timer.timeout.connect(collision_timeout)
@@ -56,3 +58,16 @@ func dash_change(value: bool) -> void:
 
 func collision_timeout() -> void:
     dash_collision = false
+    
+func respawn() -> void:
+    await Global.ui.fade_out()
+    velocity = Vector2.ZERO
+    dashing = false
+    movement_component.bouncing = false
+    dash_component.dashing = false
+    dash_component.can_dash = true
+    dash_component.dash_particles.emitting = false
+    global_position = last_spawn
+    health_component.health = health_component.max_health
+    Global.ui.change_health(health_component.health)
+    await Global.ui.fade_in()

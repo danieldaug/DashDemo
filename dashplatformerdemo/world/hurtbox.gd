@@ -12,6 +12,6 @@ func _on_area_2d_body_exited(body):
     if body is Player:
         player_contact = false
 
-func _process(delta):
+func _process(_delta):
     if player_contact:
         player.health_component.damage(1)

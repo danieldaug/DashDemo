@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/FgObjsTilemap.png-f1f8c1cbbecb525124547aaa517
 
 [params]
 
-compress/mode=3
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

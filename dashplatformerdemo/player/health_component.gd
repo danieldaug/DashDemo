@@ -4,7 +4,8 @@ class_name HealthComponent
 @export var player: Player
 @export var iframe_timer: Timer
 
-var health: float = 10
+var max_health: float = 5
+var health: float = 5
 var can_hurt = true
 
 # Constants
@@ -18,7 +19,9 @@ func damage(amount: float) -> void:
         can_hurt = false
         health -= amount
         if health <= 0:
-            player.queue_free()
+            player.respawn()
+        else:
+            Global.ui.change_health(health)
         iframe_timer.start(IFRAME_TIME)
         var tween = self.create_tween()
         tween.tween_method(reduce_blink, 1.0, 0.0, 0.5)

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm2kqi020jp4u"]
+
+[ext_resource type="Script" uid="uid://kimg0267q2qt" path="res://world/bg_fish.gd" id="1_8prhu"]
+[ext_resource type="Texture2D" uid="uid://dlesiome6fvch" path="res://world/BgFish.png" id="2_5pr5v"]
+
+[node name="BgFish" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_8prhu")
+sprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 3
+texture = ExtResource("2_5pr5v")
+hframes = 4

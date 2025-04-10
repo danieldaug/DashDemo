@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/ReefTilemap.png-5c75ca5585b0a6b52a14e4bb27fff
 
 [params]
 
-compress/mode=3
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

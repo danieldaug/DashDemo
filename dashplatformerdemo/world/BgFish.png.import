@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgyd0tw5xndp2"
-path="res://.godot/imported/RockemForeground.png-37c22b17163fe71c8054b618343a39f7.ctex"
+uid="uid://dlesiome6fvch"
+path="res://.godot/imported/BgFish.png-50affd84c7a04e4d63bbce005086afe2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/RockemForeground.png"
-dest_files=["res://.godot/imported/RockemForeground.png-37c22b17163fe71c8054b618343a39f7.ctex"]
+source_file="res://world/BgFish.png"
+dest_files=["res://.godot/imported/BgFish.png-50affd84c7a04e4d63bbce005086afe2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=3
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
@@ -31,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

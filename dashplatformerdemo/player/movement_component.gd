@@ -5,6 +5,8 @@ class_name MovementComponent
 @export var coyote_timer: Timer
 @export var wall_jump_timer: Timer
 
+var bouncing: bool = false
+
 # Speed
 var cur_speed: float = 0.0
 var cur_jump_speed: float = 0.0
@@ -33,6 +35,14 @@ const COYOTE_TIME: float = 0.2
 const WALL_JUMP_WAIT: float = 0.1
 
 func _physics_process(delta):
+    if bouncing:
+        player.dashing = false
+        player.dash_component.dashing = false
+        player.dash_component.can_dash = true
+        player.dash_component.dash_particles.emitting = false
+        player.move_and_slide()
+        _surface_status()
+        return
     if player.dashing:
         return 
     _surface_status()
@@ -121,6 +131,7 @@ func _surface_status():
         jumping = false
         falling = false
         on_wall = true
+        bouncing = false
         
     # Detach from wall
     if on_wall and abs(player.global_position.x - wall_pos) > 5:
@@ -135,6 +146,7 @@ func _surface_status():
         jumping = false
         falling = false
         on_ceiling = true
+        bouncing = false
         
     # Detach from ceiling
     if on_ceiling and player.global_position.y != ceiling_pos:
@@ -143,6 +155,9 @@ func _surface_status():
     
     if !on_wall and !on_ceiling and !player.is_on_floor() and player.velocity.y > 0:
         falling = true
+    
+    if player.is_on_floor():
+        bouncing = false
 
 # Physics applied based on current surface
 func _surface_physics(delta):

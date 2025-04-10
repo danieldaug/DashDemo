@@ -29,7 +29,7 @@ func _physics_process(delta):
 
     cur_direction = input_vector.normalized() if input_vector.length() > 0 else Vector2.ZERO
     
-    if cur_direction != Vector2.ZERO and Input.is_action_just_pressed("dash") and can_dash:
+    if cur_direction != Vector2.ZERO and Input.is_action_just_pressed("dash") and can_dash and !movement_comp.bouncing:
         dashing = true
         player.dashing = true
         movement_comp.on_wall = false

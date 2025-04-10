@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://bgeawnvik5qw"]
+
+[ext_resource type="Script" uid="uid://d137rswpehg3d" path="res://ui/ui.gd" id="1_1t8g0"]
+[ext_resource type="Texture2D" uid="uid://bc1rh4of3pv0l" path="res://ui/Healthbar.png" id="2_ks8t7"]
+[ext_resource type="Shader" uid="uid://dhyn54t0veccu" path="res://ui/transition.gdshader" id="2_vkava"]
+[ext_resource type="Texture2D" uid="uid://vso1hkb61cof" path="res://ui/HealthbarBack.png" id="2_wl5ax"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tf0e0"]
+shader = ExtResource("2_vkava")
+shader_parameter/ripple_radius = 0.0
+shader_parameter/ripple_strength = 0.03
+shader_parameter/ripple_thickness = 0.1
+shader_parameter/center_uv = Vector2(0.5, 0.5)
+shader_parameter/alpha = 0.0
+
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("transition_rect", "healthbar", "darkness")]
+script = ExtResource("1_1t8g0")
+transition_rect = NodePath("TransitionRect")
+healthbar = NodePath("MarginContainer/HealthBar")
+darkness = NodePath("Darkness")
+
+[node name="Darkness" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+z_index = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="TransitionRect" type="ColorRect" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_tf0e0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(1.5, 1.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer"]
+texture_filter = 3
+layout_mode = 2
+max_value = 5.0
+value = 5.0
+texture_under = ExtResource("2_wl5ax")
+texture_progress = ExtResource("2_ks8t7")
+texture_progress_offset = Vector2(10, -10)

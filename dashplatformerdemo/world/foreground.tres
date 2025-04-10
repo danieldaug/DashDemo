@@ -1,0 +1,22 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bet1ew0r5x44i"]
+
+[ext_resource type="Texture2D" uid="uid://dak7615kwpnm3" path="res://world/FgObjsTilemap.png" id="1_bcq4y"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pknmj"]
+texture = ExtResource("1_bcq4y")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/animation_columns = 2
+2:1/animation_frame_0/duration = 0.2
+2:1/animation_frame_1/duration = 0.2
+2:1/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_pknmj")

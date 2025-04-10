@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://do2wxtc8iykvx"]
+[gd_scene load_steps=41 format=3 uid="uid://do2wxtc8iykvx"]
 
 [ext_resource type="Script" uid="uid://c81bamqh4sd16" path="res://player/player.gd" id="1_83hs8"]
 [ext_resource type="Script" uid="uid://025a6rahqpjp" path="res://player/dash_component.gd" id="2_3c3w1"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://de6ea1onpjau2" path="res://player/animation_component.gd" id="5_aqcbf"]
 [ext_resource type="Texture2D" uid="uid://bw1aakleqved6" path="res://player/SquidSheet.png" id="5_x8kxw"]
 [ext_resource type="Script" uid="uid://do4dfmxomugv2" path="res://player/health_component.gd" id="6_gskgj"]
+[ext_resource type="Script" uid="uid://dfa14bmp0xcdt" path="res://player/bubble_collision.gd" id="8_06mnu"]
 
 [sub_resource type="Gradient" id="Gradient_aqcbf"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -236,6 +237,9 @@ color_ramp = SubResource("GradientTexture1D_06mnu")
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gskgj"]
 radius = 15.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gskgj"]
+size = Vector2(29, 29)
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("movement_component", "dash_component", "health_component", "sprite", "camera")]
 script = ExtResource("1_83hs8")
 movement_component = NodePath("Components/MovementComponent")
@@ -257,7 +261,7 @@ texture_filter = 3
 material = SubResource("ShaderMaterial_gskgj")
 position = Vector2(0, -15)
 sprite_frames = SubResource("SpriteFrames_d4g0h")
-animation = &"walk"
+animation = &"idle"
 
 [node name="Bubbles" type="GPUParticles2D" parent="PlayerSprite"]
 show_behind_parent = true
@@ -303,12 +307,28 @@ iframe_timer = NodePath("IFrames")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -25)
-zoom = Vector2(2, 2)
+zoom = Vector2(1.2, 1.2)
+process_callback = 0
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_right_margin = 0.1
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="WallJumpTimer" type="Timer" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." node_paths=PackedStringArray("player")]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("8_06mnu")
+player = NodePath("..")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0.5, -14.5)
+shape = SubResource("RectangleShape2D_gskgj")
 
 [connection signal="timeout" from="Components/DashComponent/DashCooldown" to="Components/DashComponent" method="_on_dash_cooldown_timeout"]
 [connection signal="timeout" from="WallJumpTimer" to="Components/MovementComponent" method="_on_wall_jump_timer_timeout"]
