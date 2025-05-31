@@ -1,0 +1,118 @@
+[gd_scene load_steps=14 format=3 uid="uid://bdo0d3kd8qd46"]
+
+[ext_resource type="Script" uid="uid://ctaeou8y3weow" path="res://mobs/jellyfish/jellyfish.gd" id="1_lyi7v"]
+[ext_resource type="Texture2D" uid="uid://b6ja4elm0v34f" path="res://mobs/jellyfish/JellySheet.png" id="1_tt7bd"]
+
+[sub_resource type="Shader" id="Shader_lyi7v"]
+code = "shader_type canvas_item;
+
+uniform vec2 impact_dir = vec2(0.0, 0.0);
+uniform float strength : hint_range(0.0, 1.0) = 0.5;
+uniform float decay_speed : hint_range(1.0, 10.0) = 4.0;
+uniform float wobble_speed : hint_range(1.0, 10.0) = 5.0;
+uniform float wobble_intensity : hint_range(0.0, 1.0) = 0.2;
+
+void fragment() {
+    vec2 uv = UV;
+
+    // Wobble animation over time
+    float time_factor = sin(TIME * wobble_speed) * exp(-TIME * decay_speed) * wobble_intensity;
+
+    // Squish and stretch effect
+    uv += impact_dir * strength * time_factor;
+
+    // Render the texture with deformation
+    COLOR = texture(TEXTURE, uv);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vkyvp"]
+shader = SubResource("Shader_lyi7v")
+shader_parameter/impact_dir = Vector2(0, 0)
+shader_parameter/strength = 1.0
+shader_parameter/decay_speed = 1.556
+shader_parameter/wobble_speed = 10.0
+shader_parameter/wobble_intensity = 0.588
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lyi7v"]
+atlas = ExtResource("1_tt7bd")
+region = Rect2(0, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0qvs"]
+atlas = ExtResource("1_tt7bd")
+region = Rect2(80, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vkyvp"]
+atlas = ExtResource("1_tt7bd")
+region = Rect2(160, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h0w5i"]
+atlas = ExtResource("1_tt7bd")
+region = Rect2(240, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asefr"]
+atlas = ExtResource("1_tt7bd")
+region = Rect2(0, 96, 80, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_khxxq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyi7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0qvs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vkyvp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h0w5i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_asefr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y0qvs"]
+radius = 32.0
+height = 86.84
+
+[sub_resource type="Gradient" id="Gradient_dv2g1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0cohq"]
+gradient = SubResource("Gradient_dv2g1")
+fill = 1
+fill_from = Vector2(0.515909, 0.479545)
+fill_to = Vector2(0.845455, 0.186364)
+
+[node name="Jellyfish" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_lyi7v")
+sprite = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 3
+material = SubResource("ShaderMaterial_vkyvp")
+sprite_frames = SubResource("SpriteFrames_khxxq")
+autoplay = "default"
+frame_progress = 0.0888136
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -4.91)
+shape = SubResource("CapsuleShape2D_y0qvs")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, 1.5)
+scale = Vector2(1, 1.57812)
+texture = SubResource("GradientTexture2D_0cohq")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

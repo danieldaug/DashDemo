@@ -1,0 +1,191 @@
+[gd_scene load_steps=23 format=3 uid="uid://delmx6et8h0y"]
+
+[ext_resource type="Script" uid="uid://dvjj6m2t3nqt6" path="res://player/player_refactor.gd" id="1_7pk6x"]
+[ext_resource type="Shader" uid="uid://1n7xiy3lthr2" path="res://shaders/player.gdshader" id="2_t1jsh"]
+[ext_resource type="SpriteFrames" uid="uid://dj7ftgpdr0muu" path="res://player/PlayerSprite.tres" id="2_xup1p"]
+[ext_resource type="Script" uid="uid://dfa14bmp0xcdt" path="res://player/bubble_collision.gd" id="3_mimk5"]
+[ext_resource type="Script" uid="uid://cnmjrjt8vmc28" path="res://player/FSM/state_machine.gd" id="4_xup1p"]
+[ext_resource type="Script" uid="uid://dmusriwtge4wt" path="res://player/FSM/on_surface.gd" id="5_mimk5"]
+[ext_resource type="Script" uid="uid://0eptln5oi1ep" path="res://player/health_component_r.gd" id="6_1yjaq"]
+[ext_resource type="Script" uid="uid://bfte5bnbpmhuv" path="res://player/FSM/off_surface.gd" id="6_fokt3"]
+[ext_resource type="Script" uid="uid://dmu2abybuxvrw" path="res://player/FSM/dashing.gd" id="7_lhj1m"]
+[ext_resource type="Script" uid="uid://cvo1l1dril8jj" path="res://player/animation_component_ref.gd" id="9_vwabj"]
+
+[sub_resource type="Gradient" id="Gradient_1yjaq"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gskgj"]
+gradient = SubResource("Gradient_1yjaq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fokt3"]
+particle_flag_disable_z = true
+direction = Vector3(0, 1, 0)
+spread = 10.0
+initial_velocity_min = 107.69
+initial_velocity_max = 176.92
+gravity = Vector3(0, 98, 0)
+scale_min = 3.0
+scale_max = 4.0
+color_ramp = SubResource("GradientTexture1D_gskgj")
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lhj1m"]
+radius = 15.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t1jsh"]
+shader = ExtResource("2_t1jsh")
+shader_parameter/blinking = false
+shader_parameter/blink_color = Color(1, 1, 1, 1)
+shader_parameter/blink_intensity = 0.0
+shader_parameter/OLDCOLOR1 = Color(0.882353, 0.537255, 0.870588, 1)
+shader_parameter/OLDCOLOR2 = Color(1, 0.827451, 0.929412, 1)
+shader_parameter/OLDCOLOR3 = Color(0.67451, 0.254902, 0.729412, 1)
+shader_parameter/OLDCOLOR4 = Color(0.419608, 0.113725, 0.556863, 1)
+shader_parameter/NEWCOLOR1 = Color(0.882353, 0.537255, 0.870588, 1)
+shader_parameter/NEWCOLOR2 = Color(1, 0.827451, 0.929412, 1)
+shader_parameter/NEWCOLOR3 = Color(0.67451, 0.254902, 0.729412, 1)
+shader_parameter/NEWCOLOR4 = Color(0.419608, 0.113725, 0.556863, 1)
+
+[sub_resource type="Gradient" id="Gradient_vwabj"]
+colors = PackedColorArray(1, 1, 1, 0.796078, 1, 1, 1, 0.121569)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_06mnu"]
+gradient = SubResource("Gradient_vwabj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t1jsh"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(10, 10, 1)
+direction = Vector3(0, -1, 0)
+gravity = Vector3(0, -44, 0)
+scale_max = 2.0
+color_ramp = SubResource("GradientTexture1D_06mnu")
+
+[sub_resource type="Gradient" id="Gradient_t1jsh"]
+colors = PackedColorArray(0.882353, 0.537255, 0.870588, 1, 0.882353, 0.537255, 0.870588, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6m5vq"]
+gradient = SubResource("Gradient_t1jsh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y2hfo"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_max = 99.43
+gravity = Vector3(0, 0, 0)
+damping_min = 21.97
+damping_max = 21.97
+scale_min = 3.0
+scale_max = 5.0
+color_ramp = SubResource("GradientTexture1D_6m5vq")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6m5vq"]
+size = Vector2(30, 30)
+
+[node name="PlayerRefactor" type="CharacterBody2D" node_paths=PackedStringArray("camera", "sprite", "health_component", "state_machine", "dash_cooldown", "resaturated_fx")]
+collision_layer = 5
+collision_mask = 5
+script = ExtResource("1_7pk6x")
+camera = NodePath("Camera2D")
+sprite = NodePath("PlayerSprite")
+health_component = NodePath("Components/HealthComponent")
+state_machine = NodePath("StateMachine")
+dash_cooldown = NodePath("StateMachine/DashCooldownTimer")
+resaturated_fx = NodePath("PlayerSprite/Resaturated")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(0, -25)
+zoom = Vector2(1.2, 1.2)
+process_callback = 0
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_right_margin = 0.1
+
+[node name="Ink" type="GPUParticles2D" parent="."]
+show_behind_parent = true
+emitting = false
+amount = 100
+lifetime = 0.75
+process_material = SubResource("ParticleProcessMaterial_fokt3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_lhj1m")
+
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 3
+material = SubResource("ShaderMaterial_t1jsh")
+sprite_frames = ExtResource("2_xup1p")
+animation = &"idle"
+
+[node name="Bubbles" type="GPUParticles2D" parent="PlayerSprite"]
+show_behind_parent = true
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_t1jsh")
+
+[node name="Resaturated" type="GPUParticles2D" parent="PlayerSprite"]
+emitting = false
+amount = 20
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+trail_lifetime = 0.1
+process_material = SubResource("ParticleProcessMaterial_y2hfo")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." node_paths=PackedStringArray("player")]
+visible = false
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_mimk5")
+player = NodePath("..")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_6m5vq")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("init_state", "states", "animation_component")]
+script = ExtResource("4_xup1p")
+init_state = NodePath("OnSurface")
+states = {
+"Dashing": NodePath("Dashing"),
+"OffSurface": NodePath("OffSurface"),
+"OnSurface": NodePath("OnSurface")
+}
+animation_component = NodePath("../Components/AnimationComponent")
+
+[node name="OnSurface" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "coyote_timer")]
+script = ExtResource("5_mimk5")
+player = NodePath("../..")
+coyote_timer = NodePath("../CoyoteTimer")
+
+[node name="OffSurface" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+script = ExtResource("6_fokt3")
+player = NodePath("../..")
+
+[node name="Dashing" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "dash_particles")]
+script = ExtResource("7_lhj1m")
+player = NodePath("../..")
+dash_particles = NodePath("../../Ink")
+
+[node name="CoyoteTimer" type="Timer" parent="StateMachine"]
+wait_time = 0.2
+one_shot = true
+
+[node name="DashCooldownTimer" type="Timer" parent="StateMachine"]
+one_shot = true
+
+[node name="Components" type="Node" parent="."]
+
+[node name="HealthComponent" type="Node" parent="Components" node_paths=PackedStringArray("player", "iframe_timer")]
+script = ExtResource("6_1yjaq")
+player = NodePath("../..")
+iframe_timer = NodePath("IFrames")
+
+[node name="IFrames" type="Timer" parent="Components/HealthComponent"]
+
+[node name="AnimationComponent" type="Node" parent="Components" node_paths=PackedStringArray("player", "sprite", "bubble_particles", "on_surface_state", "off_surface_state")]
+script = ExtResource("9_vwabj")
+player = NodePath("../..")
+sprite = NodePath("../../PlayerSprite")
+bubble_particles = NodePath("../../PlayerSprite/Bubbles")
+on_surface_state = NodePath("../../StateMachine/OnSurface")
+off_surface_state = NodePath("../../StateMachine/OffSurface")

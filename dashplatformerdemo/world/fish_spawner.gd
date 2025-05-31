@@ -10,7 +10,6 @@ const MAX_SPAWN_RATE: float = 5.0
 const MIN_SPAWN_RATE: float = 10.0
 
 func _on_timer_timeout():
-    print("spawning")
     for i in range(3):
         var fish_instance = fish.instantiate()
         var bounds: Shape2D = collision_shape.shape
