@@ -9,6 +9,7 @@ signal fully_reset(arm_id)
 @export var roof_hurtbox: Area2D
 @export var charge_timer: Timer
 @export var is_forward: bool = true
+@export var fade_sprite: Sprite2D
 
 var switching: bool = false
 var slapping: bool = false
@@ -26,6 +27,10 @@ var target_height: float
 var angle: float = 0.0
 var upward_slapping: bool = false
 var shake_center: Vector2
+var blink_intensifying: bool = false
+var blinking: bool = true
+var hand_tween: Tween
+var blink_intensity = 0.0
 
 # Constants
 const SLAP_SPEED: float = 750.0
@@ -36,6 +41,7 @@ const MIN_CHARGE_TIME: float = 0.25
 const MAX_CHARGE_TIME: float = 0.75
 const MOVE_HEIGHT_SPEED: float = 1000.0
 const SETUP_SINK_TIME: float = 1.5
+const HAND_BLINK_TIME: float = 0.2
 
 func _ready():
     if !is_forward:
@@ -47,7 +53,7 @@ func _ready():
             arm_sprite.play("forward")
         hand_sprite.play("forward")
 
-func _process(delta):
+func _physics_process(delta):
     # Sprite rotation
     if switching and !hand_sprite.is_playing():
         switching = false
@@ -62,6 +68,9 @@ func _process(delta):
             for arm_sprite in arm_sprites:
                 arm_sprite.play("backward")
             hand_sprite.play("backward")
+    
+    # Hand shader
+    hand_sprite.material.set_shader_parameter("blink_intensity", blink_intensity)
 
     if sinking:
         sink(delta)
@@ -85,6 +94,7 @@ func _process(delta):
     elif temp_stay_height:
         pass
     elif idling:
+        blink_intensity = 0.0
         angle = fmod(angle + bob_speed * delta * TAU, TAU)
         var idle_offset = sin(angle) * bob_height
         global_position.y = cur_station.y + idle_offset
@@ -94,11 +104,13 @@ func _process(delta):
             else:
                 hand_sprite.play("backward")
     elif slapping:
+        blink_intensity = 0.0
         if is_forward:
             global_position.y += SLAP_SPEED * delta
         else:
             global_position.y -= SLAP_SPEED * delta
     elif vertical_slapping:
+        blink_intensity = 0.0
         if hand_sprite.animation != "slap_forward" and hand_sprite.animation != "slap_backward":
             if is_forward:
                 hand_sprite.animation = "slap_forward"
@@ -114,6 +126,7 @@ func _process(delta):
             hand_sprite.stop()
             hand_sprite.frame = 2      
     elif resetting:
+        blink_intensity = 0.0
         if !hand_sprite.is_playing():
             if is_forward:
                 hand_sprite.play("forward")
@@ -124,6 +137,24 @@ func _process(delta):
             resetting = false
             idling = true
             fully_reset.emit(self)
+
+func blink_hand():
+    if hand_tween:
+        hand_tween.kill()
+
+    hand_tween = create_tween()
+
+    if blink_intensifying:
+        hand_tween.tween_property(self, "blink_intensity", 0.0, HAND_BLINK_TIME)
+    else:
+        hand_tween.tween_property(self, "blink_intensity", 1.0, HAND_BLINK_TIME)
+
+    await hand_tween.finished
+    
+    if blinking:
+        blink_intensifying = !blink_intensifying
+        blink_hand()
+
 
 func slap():
     slapping = true
@@ -183,6 +214,8 @@ func start_shake():
     idling = false
     shaking = true
     if !sinking:
+        blinking = true
+        blink_hand()
         charge_timer.start(randf_range(MIN_CHARGE_TIME, MAX_CHARGE_TIME))
     else:
         roof_hurtbox.set_deferred("monitoring", false)
@@ -193,6 +226,8 @@ func start_shake():
 func end_shake():
     shaking = false
     global_position = shake_center
+    blinking = false
+    blink_intensifying = false
     
 func reset():
     vertical_slapping = false
@@ -214,8 +249,12 @@ func _on_floor_collision_body_entered(body):
         reset()
     elif vertical_slapping and body is TileMapLayer:
         upward_slapping = !upward_slapping
+    Global.sfx.play("boss_thump", global_position)
 
 func enter_die():
+    blinking = false
+    blink_intensifying = false
+    blink_intensity = 0.0
     slapping = false
     resetting = false
     shaking = false
@@ -234,5 +273,6 @@ func _on_charge_timer_timeout():
     if sinking:
         start_shake()
     else:
+        temp_stay_height = false
         end_shake()
         slap()

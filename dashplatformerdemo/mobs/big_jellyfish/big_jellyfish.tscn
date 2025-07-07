@@ -1,0 +1,93 @@
+[gd_scene load_steps=13 format=3 uid="uid://c1wdxh51k5e0w"]
+
+[ext_resource type="Texture2D" uid="uid://rmvflmcgdg3p" path="res://mobs/big_jellyfish/BigJelly.png" id="1_40js1"]
+[ext_resource type="Script" uid="uid://ctaeou8y3weow" path="res://mobs/jellyfish/jellyfish.gd" id="1_ml1g0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qvax3"]
+atlas = ExtResource("1_40js1")
+region = Rect2(0, 0, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w8fp4"]
+atlas = ExtResource("1_40js1")
+region = Rect2(128, 0, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qp7a"]
+atlas = ExtResource("1_40js1")
+region = Rect2(256, 0, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nadcv"]
+atlas = ExtResource("1_40js1")
+region = Rect2(384, 0, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1bwp"]
+atlas = ExtResource("1_40js1")
+region = Rect2(0, 192, 128, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s6rbf"]
+atlas = ExtResource("1_40js1")
+region = Rect2(128, 192, 128, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e8w5k"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qvax3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w8fp4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qp7a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nadcv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1bwp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s6rbf")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cctsm"]
+radius = 55.0
+height = 166.0
+
+[sub_resource type="Gradient" id="Gradient_dv2g1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ml1g0"]
+gradient = SubResource("Gradient_dv2g1")
+fill = 1
+fill_from = Vector2(0.515909, 0.479545)
+fill_to = Vector2(0.845455, 0.186364)
+
+[node name="BigJellyfish" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_ml1g0")
+sprite = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_e8w5k")
+autoplay = "default"
+frame_progress = 0.0430417
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -6.06)
+shape = SubResource("CapsuleShape2D_cctsm")
+
+[node name="PointLight2D2" type="PointLight2D" parent="."]
+position = Vector2(0, -30.48)
+scale = Vector2(1.5, 1.5)
+energy = 0.86
+texture = SubResource("GradientTexture2D_ml1g0")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

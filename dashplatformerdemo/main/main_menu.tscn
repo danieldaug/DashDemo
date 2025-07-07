@@ -1,0 +1,224 @@
+[gd_scene load_steps=20 format=3 uid="uid://oy74uwwbjhb2"]
+
+[ext_resource type="Script" uid="uid://dkuheyajygb6x" path="res://ui/title_container.gd" id="1_0dkrt"]
+[ext_resource type="Script" uid="uid://cafavq8bjb0lo" path="res://main/main_menu.gd" id="1_ei257"]
+[ext_resource type="Texture2D" uid="uid://dttvk8d8kwebp" path="res://ui/LogoSprite.png" id="1_t7e0r"]
+[ext_resource type="PackedScene" uid="uid://pv4t2clbxi1y" path="res://util/underwater_panel.tscn" id="3_wk0pr"]
+[ext_resource type="FontFile" uid="uid://diajd0v5fbtv0" path="res://main/Daydream.ttf" id="4_8uxxo"]
+[ext_resource type="Texture2D" uid="uid://b7k6dcxgk63ab" path="res://ui/MenuButtonShort.png" id="6_hu631"]
+[ext_resource type="Script" uid="uid://0cafiv78idw8" path="res://main/button.gd" id="7_3sh4s"]
+[ext_resource type="Texture2D" uid="uid://ymv3gavdxvkt" path="res://ui/MenuBg1.png" id="7_4fsgo"]
+[ext_resource type="Shader" uid="uid://dhyn54t0veccu" path="res://ui/transition.gdshader" id="7_go4yo"]
+[ext_resource type="Texture2D" uid="uid://lmk2t1h76xri" path="res://ui/MenuTentacle.png" id="8_guapg"]
+[ext_resource type="Texture2D" uid="uid://dge0frgnrkk75" path="res://ui/MenuButton.png" id="8_hgtvi"]
+[ext_resource type="Texture2D" uid="uid://cievdvp615hs1" path="res://ui/MenuEye.png" id="9_ctf8e"]
+[ext_resource type="Texture2D" uid="uid://ns00yfcco1x1" path="res://ui/MenuBg2.png" id="9_hu631"]
+
+[sub_resource type="Gradient" id="Gradient_wk0pr"]
+colors = PackedColorArray(1, 1, 1, 0.796078, 1, 1, 1, 0.121569)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_06mnu"]
+gradient = SubResource("Gradient_wk0pr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rmr83"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(40, 5, 1)
+emission_shape = 3
+emission_box_extents = Vector3(10, 10, 1)
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 7.58
+initial_velocity_max = 15.15
+gravity = Vector3(0, -44, 0)
+scale_min = 10.0
+scale_max = 10.0
+color_ramp = SubResource("GradientTexture1D_06mnu")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3sh4s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hgtvi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_guapg"]
+resource_local_to_scene = true
+shader = ExtResource("7_go4yo")
+shader_parameter/ripple_radius = 0.0
+shader_parameter/ripple_strength = 0.03
+shader_parameter/ripple_thickness = 0.1
+shader_parameter/center_uv = Vector2(0.5, 0.5)
+shader_parameter/alpha = 0.0
+shader_parameter/tint_color = Color(0.121569, 0.709804, 0.921569, 1)
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("transition_rect")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ei257")
+transition_rect = NodePath("TransitionRect")
+
+[node name="TitleContainer" type="CenterContainer" parent="." node_paths=PackedStringArray("ink_origins", "drop_timer", "bubbles")]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 556.0
+offset_top = -200.0
+offset_right = -556.0
+offset_bottom = -808.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("1_0dkrt")
+ink_origins = [NodePath("../InkOrigin"), NodePath("../InkOrigin2"), NodePath("../InkOrigin3")]
+drop_timer = NodePath("DropTimer")
+bubbles = NodePath("Bubbles")
+
+[node name="LogoSprite" type="Sprite2D" parent="TitleContainer"]
+texture_filter = 3
+texture = ExtResource("1_t7e0r")
+
+[node name="DropTimer" type="Timer" parent="TitleContainer"]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="Bubbles" type="GPUParticles2D" parent="TitleContainer"]
+show_behind_parent = true
+amount = 15
+lifetime = 3.0
+process_material = SubResource("ParticleProcessMaterial_rmr83")
+
+[node name="InkOrigin" type="Marker2D" parent="."]
+position = Vector2(400, 175)
+
+[node name="InkOrigin2" type="Marker2D" parent="."]
+position = Vector2(600, 210)
+
+[node name="InkOrigin3" type="Marker2D" parent="."]
+position = Vector2(850, 205)
+
+[node name="UnderwaterPanel" parent="." instance=ExtResource("3_wk0pr")]
+layer = 0
+
+[node name="ButtonContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 285.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ButtonContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="StartButton" type="Button" parent="ButtonContainer/VBoxContainer"]
+z_index = 1
+texture_filter = 3
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.608747, 0.871065, 0.997392, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_8uxxo")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3sh4s")
+text = "Start"
+icon = ExtResource("6_hu631")
+flat = true
+icon_alignment = 1
+script = ExtResource("7_3sh4s")
+
+[node name="OptionsButton" type="Button" parent="ButtonContainer/VBoxContainer"]
+z_index = 1
+texture_filter = 3
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_8uxxo")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hgtvi")
+text = "Options"
+icon = ExtResource("6_hu631")
+flat = true
+icon_alignment = 1
+
+[node name="CloseButton" type="Button" parent="ButtonContainer/VBoxContainer"]
+z_index = 1
+texture_filter = 3
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("4_8uxxo")
+theme_override_font_sizes/font_size = 35
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hgtvi")
+text = "Close Game"
+icon = ExtResource("8_hgtvi")
+flat = true
+icon_alignment = 1
+
+[node name="Credits" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.456
+anchor_top = 0.938
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.312012
+offset_top = 0.175964
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="Credits"]
+texture_filter = 3
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_8uxxo")
+theme_override_font_sizes/font_size = 12
+text = "Demo Created By Daniel Daugbjerg, BirdBurger Games"
+
+[node name="TransitionRect" type="ColorRect" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_guapg")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MenuBg1" type="Sprite2D" parent="."]
+texture_filter = 3
+position = Vector2(580, 403)
+texture = ExtResource("7_4fsgo")
+
+[node name="MenuBg2" type="Sprite2D" parent="."]
+texture_filter = 3
+position = Vector2(580, 403)
+texture = ExtResource("9_hu631")
+
+[node name="MenuTentacle" type="Sprite2D" parent="."]
+texture_filter = 3
+position = Vector2(969, 401)
+texture = ExtResource("8_guapg")
+
+[node name="MenuEye" type="Sprite2D" parent="."]
+texture_filter = 3
+position = Vector2(148, 500)
+texture = ExtResource("9_ctf8e")
+
+[connection signal="timeout" from="TitleContainer/DropTimer" to="TitleContainer" method="_on_drop_timer_timeout"]
+[connection signal="pressed" from="ButtonContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="ButtonContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="ButtonContainer/VBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

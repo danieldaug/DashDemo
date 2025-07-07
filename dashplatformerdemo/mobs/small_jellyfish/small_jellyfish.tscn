@@ -1,0 +1,108 @@
+[gd_scene load_steps=15 format=3 uid="uid://3lcrrus4hkpg"]
+
+[ext_resource type="Script" uid="uid://ctaeou8y3weow" path="res://mobs/jellyfish/jellyfish.gd" id="1_2td1b"]
+[ext_resource type="Texture2D" uid="uid://ckfmixh6xk3pf" path="res://mobs/small_jellyfish/SmallJelly.png" id="1_icm5b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2td1b"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkm63"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aebtm"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(64, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvi1m"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(96, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1d1y2"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iufg8"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(32, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mamag"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(64, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3f3be"]
+atlas = ExtResource("1_icm5b")
+region = Rect2(96, 64, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rlorm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2td1b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkm63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aebtm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvi1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1d1y2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iufg8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mamag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3f3be")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_dv2g1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_icm5b"]
+gradient = SubResource("Gradient_dv2g1")
+fill = 1
+fill_from = Vector2(0.515909, 0.479545)
+fill_to = Vector2(0.845455, 0.186364)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_icm5b"]
+radius = 14.0
+height = 40.62
+
+[node name="SmallJellyfish" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_2td1b")
+sprite = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 3
+position = Vector2(0, 1)
+sprite_frames = SubResource("SpriteFrames_rlorm")
+autoplay = "default"
+frame_progress = 0.427585
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -18.76)
+scale = Vector2(0.3, 0.295)
+texture = SubResource("GradientTexture2D_icm5b")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -8.62)
+shape = SubResource("CapsuleShape2D_icm5b")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

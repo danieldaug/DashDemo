@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=4 uid="uid://dluijq70wavf"]
 
-[ext_resource type="Shader" uid="uid://k15ye3glybb7" path="res://world/water.gdshader" id="1_dkjkc"]
+[ext_resource type="Shader" uid="uid://k15ye3glybb7" path="res://util/water.gdshader" id="1_dkjkc"]
 [ext_resource type="Texture2D" uid="uid://dcx3a5lbc3uh6" path="res://world/thirdbg.png" id="2_ifpfw"]
 [ext_resource type="Texture2D" uid="uid://ctfmsgrfi6qsr" path="res://world/secondbg.png" id="3_3fwaf"]
 [ext_resource type="Texture2D" uid="uid://b3iaop47e58l7" path="res://world/frontbg.png" id="4_wlbcv"]
@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bdo0d3kd8qd46" path="res://mobs/jellyfish/jellyfish.tscn" id="11_4dkoe"]
 [ext_resource type="PackedScene" uid="uid://delmx6et8h0y" path="res://player/PlayerRefactor.tscn" id="12_8vrm4"]
 [ext_resource type="PackedScene" uid="uid://bd13b2faw00cu" path="res://mobs/mollusk/mollusk.tscn" id="12_ughbj"]
-[ext_resource type="PackedScene" uid="uid://bw4rvydy62ne0" path="res://world/hurtbox.tscn" id="13_8aitq"]
+[ext_resource type="PackedScene" uid="uid://bw4rvydy62ne0" path="res://util/hurtbox.tscn" id="13_8aitq"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_53nii"]
 noise_type = 2

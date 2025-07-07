@@ -42,7 +42,7 @@ func on_surface_animations():
     elif (player.velocity.y > 0 and on_surface_state.wall_left) or (player.velocity.y < 0 and !on_surface_state.wall_left) or (on_surface_state.surface_type != on_surface_state.SurfaceType.CEILING and player.velocity.x > 0) or(on_surface_state.surface_type == on_surface_state.SurfaceType.CEILING and player.velocity.x < 0):
         sprite.flip_h = false
         sprite.play("walk")
-    elif player.velocity != Vector2.ZERO:
+    elif player.velocity != Vector2.ZERO and !(on_surface_state.manual_lock and on_surface_state.surface_type == on_surface_state.SurfaceType.NONE):
         sprite.flip_h = true
         sprite.play("walk")
     else:
@@ -52,7 +52,7 @@ func sprite_rotation(delta: float):
     var angle: float = -1.0
     if cur_state == "OnSurface":
         if player.get_slide_collision_count() > 0 and !has_handled_rotation:
-            var collision = player.get_slide_collision(0)
+            var collision = player.get_last_slide_collision()
             var normal = collision.get_normal()
             # Compute the surface angle in radians and apply to sprite
             angle = atan2(normal.y, normal.x) + PI / 2
@@ -62,19 +62,20 @@ func sprite_rotation(delta: float):
         # Rotate back to upright
         var angle_diff = fposmod(0 - sprite.rotation + PI, TAU) - PI
         sprite.rotation = move_toward(sprite.rotation, sprite.rotation + angle_diff, ROT_RESET_SPEED * delta)
-    else:
+    elif cur_state == "Dashing":
         # Rotate towards dash direction
         sprite.rotation = player.state_machine.states["Dashing"].dash_dir.angle() + PI / 2
 
 func _process(delta):
     has_handled_rotation = false
-    if cur_state == "OnSurface":
-        on_surface_animations()
-    elif cur_state == "OffSurface":
-        off_surface_animations()
-    else:
-        dash_animations()
-        
+    if !player.controls_disabled:
+        if cur_state == "OnSurface":
+            on_surface_animations()
+        elif cur_state == "OffSurface":
+            off_surface_animations()
+        else:
+            dash_animations()
+            
     sprite_rotation(delta)
     
     if player.velocity != Vector2.ZERO:

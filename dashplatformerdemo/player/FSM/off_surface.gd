@@ -18,6 +18,7 @@ func dash_input():
     player.dash_aim = input_vector.normalized() if input_vector.length() > 0 else Vector2.ZERO
     
     if player.dash_aim != Vector2.ZERO and Input.is_action_just_pressed("dash") and player.dash_cooldown.is_stopped():
+        Global.sfx.play("dash")
         Transitioned.emit(self, "Dashing")
 
 func Physics_Update(delta: float):

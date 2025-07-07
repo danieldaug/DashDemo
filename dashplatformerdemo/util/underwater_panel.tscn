@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://pv4t2clbxi1y"]
+
+[ext_resource type="Shader" uid="uid://k15ye3glybb7" path="res://util/water.gdshader" id="1_16c4p"]
+[ext_resource type="Script" uid="uid://cwlacy5xtk2xf" path="res://util/underwater_panel.gd" id="1_pfxwx"]
+[ext_resource type="Texture2D" uid="uid://cdog7asrut5d5" path="res://util/water_shader_noise.tres" id="3_xvkt4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sieb7"]
+resource_local_to_scene = true
+shader = ExtResource("1_16c4p")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/fast_noise = ExtResource("3_xvkt4")
+shader_parameter/speed = Vector2(0.03, 0.03)
+shader_parameter/wave_strength = 5.0
+shader_parameter/noise_scale = 0.001
+shader_parameter/camera_position = Vector2(0, 0)
+
+[node name="UnderwaterPanel" type="CanvasLayer" node_paths=PackedStringArray("panel")]
+script = ExtResource("1_pfxwx")
+panel = NodePath("Panel")
+
+[node name="Panel" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_sieb7")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2

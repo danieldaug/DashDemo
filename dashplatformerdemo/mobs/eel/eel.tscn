@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://bcotf0p8d68h1"]
 
 [ext_resource type="Script" uid="uid://dcwvyvglmrhrr" path="res://mobs/eel/eel.gd" id="1_rf84x"]
-[ext_resource type="PackedScene" uid="uid://bw4rvydy62ne0" path="res://world/hurtbox.tscn" id="2_r26or"]
+[ext_resource type="PackedScene" uid="uid://bw4rvydy62ne0" path="res://util/hurtbox.tscn" id="2_r26or"]
 [ext_resource type="Texture2D" uid="uid://do7blk3kx4jw" path="res://mobs/eel/eel.png" id="2_rf84x"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x7q3f"]
@@ -184,8 +184,11 @@ animations = [{
 radius = 29.0
 height = 322.0
 
-[node name="Eel" type="Node2D"]
+[node name="Eel" type="Node2D" node_paths=PackedStringArray("start_timer", "sprite")]
+z_index = -1
 script = ExtResource("1_rf84x")
+start_timer = NodePath("StartTimer")
+sprite = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 3
@@ -215,4 +218,8 @@ collision_mask = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
 shape = SubResource("CapsuleShape2D_r26or")
 
+[node name="StartTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_player_detection_body_entered"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]

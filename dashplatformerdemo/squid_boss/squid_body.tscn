@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=3 uid="uid://coixudeooj0dc"]
+[gd_scene load_steps=145 format=3 uid="uid://coixudeooj0dc"]
 
 [ext_resource type="Script" uid="uid://baixcmygcm2uj" path="res://squid_boss/squid_body.gd" id="1_kbc75"]
 [ext_resource type="Texture2D" uid="uid://v6gojr7berwh" path="res://squid_boss/SquidBossBackgroundEyeballs.png" id="1_mkfg2"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://btl3xf33mh2bq" path="res://squid_boss/SquidBossBackground.png" id="3_8a8i8"]
 [ext_resource type="Texture2D" uid="uid://4vfh0intlum8" path="res://squid_boss/SquidBossIrisClear.png" id="3_kbc75"]
 [ext_resource type="Texture2D" uid="uid://da4oii8vj7k45" path="res://squid_boss/SquidBossBackgroundEyeballRightDamaged.png" id="4_560ey"]
-[ext_resource type="Shader" uid="uid://b8d6aipp6pnkj" path="res://shaders/blink.gdshader" id="8_t4qb7"]
+[ext_resource type="Shader" uid="uid://1n7xiy3lthr2" path="res://shaders/blink_and_color.gdshader" id="8_t4qb7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cmw7t"]
 atlas = ExtResource("1_mkfg2")
@@ -750,8 +750,17 @@ animations = [{
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vjexb"]
 shader = ExtResource("8_t4qb7")
+shader_parameter/blinking = true
 shader_parameter/blink_color = Color(1, 1, 1, 1)
 shader_parameter/blink_intensity = 0.0
+shader_parameter/OLDCOLOR1 = Color(0.619608, 0.690196, 0.72549, 1)
+shader_parameter/OLDCOLOR2 = Color(0.870588, 0.890196, 0.898039, 1)
+shader_parameter/OLDCOLOR3 = Color(0.231373, 0.254902, 0.317647, 1)
+shader_parameter/OLDCOLOR4 = Color(0, 0, 0, 1)
+shader_parameter/NEWCOLOR1 = Color(0.619608, 0.690196, 0.72549, 1)
+shader_parameter/NEWCOLOR2 = Color(0.870588, 0.890196, 0.898039, 1)
+shader_parameter/NEWCOLOR3 = Color(0.231373, 0.254902, 0.317647, 1)
+shader_parameter/NEWCOLOR4 = Color(0, 0, 0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kmhdf"]
 atlas = ExtResource("3_8a8i8")
@@ -918,13 +927,73 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_560ey"]
-radius = 51.0098
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t4qb7"]
+size = Vector2(219.155, 15.4404)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_t4qb7"]
-radius = 51.01
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vjexb"]
+size = Vector2(132.536, 29.9453)
 
-[node name="SquidBody" type="Node2D" node_paths=PackedStringArray("body", "eyeballs", "eyelids", "damaged_left", "damaged_right", "left_eye", "right_eye", "random_blink_timer", "left_hitbox", "right_hitbox")]
+[sub_resource type="Gradient" id="Gradient_vjexb"]
+colors = PackedColorArray(0.845864, 0.00185717, 0.00101787, 1, 0.78, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1gocv"]
+gradient = SubResource("Gradient_vjexb")
+
+[sub_resource type="Curve" id="Curve_sjowv"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.597122, 2.62754), 0.0, 0.0, 0, 0, Vector2(1, 2.93769), -0.00306653, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_se052"]
+curve = SubResource("Curve_sjowv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_v8031"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 12.858
+initial_velocity_min = 60.6
+initial_velocity_max = 106.06
+gravity = Vector3(0, -20, 0)
+scale_min = 4.0
+scale_max = 6.0
+scale_curve = SubResource("CurveTexture_se052")
+color_ramp = SubResource("GradientTexture1D_1gocv")
+
+[sub_resource type="Gradient" id="Gradient_1gocv"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sjowv"]
+gradient = SubResource("Gradient_1gocv")
+
+[sub_resource type="Curve" id="Curve_se052"]
+_limits = [0.0, 2.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1.75656), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v8031"]
+curve = SubResource("Curve_se052")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_chf6q"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(100, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 30.0
+initial_velocity_min = 60.61
+initial_velocity_max = 242.43
+gravity = Vector3(0, -20, 0)
+damping_min = 9.091
+damping_max = 9.091
+scale_min = 7.5
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_v8031")
+color_ramp = SubResource("GradientTexture1D_sjowv")
+
+[node name="SquidBody" type="Node2D" node_paths=PackedStringArray("body", "eyeballs", "eyelids", "damaged_left", "damaged_right", "left_eye", "right_eye", "random_blink_timer", "switch_timer", "harpoon_blink_timer", "left_hitbox", "right_hitbox", "blood", "ink")]
 script = ExtResource("1_kbc75")
 body = NodePath("MainBody")
 eyeballs = NodePath("Eyeballs")
@@ -934,8 +1003,12 @@ damaged_right = NodePath("RightEyeDamaged")
 left_eye = NodePath("LeftEye")
 right_eye = NodePath("RightEye")
 random_blink_timer = NodePath("RandomBlinkTimer")
+switch_timer = NodePath("SwitchTimer")
+harpoon_blink_timer = NodePath("HarpoonBlinkTimer")
 left_hitbox = NodePath("LeftHitbox")
 right_hitbox = NodePath("RightHitbox")
+blood = NodePath("BloodParticles")
+ink = NodePath("InkParticles")
 
 [node name="Eyeballs" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -966,6 +1039,7 @@ flip_h = true
 
 [node name="LeftEye" type="RigidBody2D" parent="."]
 position = Vector2(-150, 420)
+disable_mode = 1
 collision_layer = 8
 collision_mask = 8
 physics_material_override = SubResource("PhysicsMaterial_g8u3d")
@@ -981,6 +1055,7 @@ texture = ExtResource("2_8a8i8")
 
 [node name="RightEye" type="RigidBody2D" parent="."]
 position = Vector2(150, 420)
+disable_mode = 1
 collision_layer = 8
 collision_mask = 8
 physics_material_override = SubResource("PhysicsMaterial_g8u3d")
@@ -1021,9 +1096,8 @@ frame_progress = 1.0
 texture_filter = 3
 material = SubResource("ShaderMaterial_vjexb")
 sprite_frames = SubResource("SpriteFrames_4npin")
-animation = &"death"
 autoplay = "default"
-frame_progress = 0.518397
+frame_progress = 0.95406
 
 [node name="LeftEyeBoundary" type="StaticBody2D" parent="."]
 collision_layer = 8
@@ -1044,20 +1118,50 @@ polygon = PackedVector2Array(158, 403, 137, 405, 135, 428, 137, 441, 145, 456, 1
 [node name="RandomBlinkTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="SwitchTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HarpoonBlinkTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="LeftHitbox" type="Area2D" parent="."]
-collision_layer = 5
+visible = false
+collision_layer = 0
 collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftHitbox"]
-position = Vector2(-130, 405)
-shape = SubResource("CircleShape2D_560ey")
+position = Vector2(122.99, -156.664)
+rotation = -0.663225
+shape = SubResource("RectangleShape2D_t4qb7")
 
 [node name="RightHitbox" type="Area2D" parent="."]
-collision_layer = 5
+visible = false
+collision_layer = 0
 collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightHitbox"]
-position = Vector2(130, 405)
-shape = SubResource("CircleShape2D_t4qb7")
+position = Vector2(-186.433, 88.526)
+rotation = -0.663225
+shape = SubResource("RectangleShape2D_vjexb")
+
+[node name="BloodParticles" type="GPUParticles2D" parent="."]
+texture_filter = 3
+position = Vector2(45, -103)
+emitting = false
+amount = 15
+lifetime = 2.0
+visibility_rect = Rect2(-34.926, -171.836, 76.592, 1042.21)
+process_material = SubResource("ParticleProcessMaterial_v8031")
+
+[node name="InkParticles" type="GPUParticles2D" parent="."]
+texture_filter = 3
+position = Vector2(0, 506.8)
+emitting = false
+amount = 600
+lifetime = 2.5
+visibility_rect = Rect2(-273.374, -638.49, 569.737, 640.036)
+process_material = SubResource("ParticleProcessMaterial_chf6q")
 
 [connection signal="timeout" from="RandomBlinkTimer" to="." method="_on_random_blink_timer_timeout"]
+[connection signal="timeout" from="SwitchTimer" to="." method="_on_switch_timer_timeout"]
+[connection signal="timeout" from="HarpoonBlinkTimer" to="." method="_on_harpoon_blink_timer_timeout"]

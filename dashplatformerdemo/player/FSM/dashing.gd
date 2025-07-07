@@ -11,15 +11,23 @@ var dash_velocity: Vector2
 var jelly_factor: float = 1.0
 var redash: bool = false
 
-# Inital Rotation
+# Rotation
 var rotating: bool = true
 var target_angle: float = 0.0
 var target_rotation: float = 0.0
+
+# Landing direction for animation rotation
+var landing_dir: Vector2
+
+# Camera lookahead
+var target_offset: Vector2
 
 # Constants
 const ROTATION_SPEED: float = 5.0
 const DASH_SPEED: float = 750.0
 const COOLDOWN_TIME: float = 0.2
+const LOOKAHEAD_DISTANCE: float = 280.0
+const LOOKAHEAD_SPEED: float = 5.0
 
 func Enter():
     # Dash UI
@@ -32,6 +40,9 @@ func Enter():
     # Ink
     if not dash_particles.emitting:
         dash_particles.emitting = true
+    landing_dir = Vector2.ZERO
+    target_offset = (dash_dir * LOOKAHEAD_DISTANCE)
+    target_offset.y *= 0.75
 
 func dash():
     if redash:
@@ -44,6 +55,8 @@ func dash():
         player.dash_aim = input_vector.normalized() if input_vector.length() > 0 else Vector2.ZERO
     
         if player.dash_aim != Vector2.ZERO and Input.is_action_just_pressed("dash"):
+            Global.sfx.stop("dash")
+            Global.sfx.play("dash")
             player.desaturate()
             redash = false
             rotating = true
@@ -63,28 +76,31 @@ func Physics_Update(delta: float):
         player.velocity = Vector2.ZERO
         # Set OnSurface state to have proper surface state
         var normal = collision.get_normal()
+        player.global_position = collision.get_position()
+        landing_dir = normal
         if normal.dot(Vector2.LEFT) > 0.7 or normal.dot(Vector2.RIGHT) > 0.7:
             player.state_machine.states["OnSurface"].surface_type = player.state_machine.states["OnSurface"].SurfaceType.WALL
-            if normal.dot(Vector2.LEFT) > 0.7:
-                player.global_position.x += 3
-            else:
-                player.global_position.x -= 3
         elif normal.dot(Vector2.UP) > 0.7:
             player.state_machine.states["OnSurface"].surface_type = player.state_machine.states["OnSurface"].SurfaceType.FLOOR
         elif normal.dot(Vector2.DOWN) > 0.7:
             player.state_machine.states["OnSurface"].surface_type = player.state_machine.states["OnSurface"].SurfaceType.CEILING
+        player.move_and_slide()
         Transitioned.emit(self, "OnSurface")
+        
+    # Camera leading
+    if !player.cam_locked and player.shake_strength == 0:
+        player.camera.offset = player.camera.offset.lerp(target_offset, LOOKAHEAD_SPEED * delta)
     
     # Potential re-dash
     dash()
 
 func Exit():
+    Global.sfx.stop("dash")
     # Dash UI
-    #var tween = create_tween()
-    #tween.tween_property(Global.ui.dashbar, "value", 15, 0.2)
     player.saturate()
     dash_particles.emitting = false
     redash = false
     rotating = true
     jelly_factor = 1.0
     player.dash_cooldown.start(COOLDOWN_TIME)
+    target_offset = Vector2.ZERO

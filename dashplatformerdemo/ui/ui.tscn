@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bgeawnvik5qw"]
+[gd_scene load_steps=23 format=3 uid="uid://bgeawnvik5qw"]
 
 [ext_resource type="Script" uid="uid://d137rswpehg3d" path="res://ui/ui.gd" id="1_1t8g0"]
 [ext_resource type="Texture2D" uid="uid://bc1rh4of3pv0l" path="res://ui/Healthbar.png" id="2_ks8t7"]
@@ -7,21 +7,58 @@
 [ext_resource type="Texture2D" uid="uid://dadu3sp0cgpmm" path="res://ui/InkSacBack.png" id="5_bo1jx"]
 [ext_resource type="Texture2D" uid="uid://bsdgdnvtb1tpe" path="res://ui/InkSacFront.png" id="6_gycre"]
 [ext_resource type="Texture2D" uid="uid://olrdn071rftq" path="res://ui/InkSacProgress.png" id="7_pa1oa"]
+[ext_resource type="Script" uid="uid://coxh83hllsj1k" path="res://ui/complete_text_container.gd" id="8_pa1oa"]
+[ext_resource type="FontFile" uid="uid://diajd0v5fbtv0" path="res://main/Daydream.ttf" id="9_ay4pc"]
+[ext_resource type="Texture2D" uid="uid://dge0frgnrkk75" path="res://ui/MenuButton.png" id="10_ay4pc"]
+[ext_resource type="Script" uid="uid://hrs36k2f6m4u" path="res://ui/return_container.gd" id="10_bi8hs"]
+[ext_resource type="Texture2D" uid="uid://b7k6dcxgk63ab" path="res://ui/MenuButtonShort.png" id="12_hrmpd"]
+[ext_resource type="Shader" uid="uid://ed56lglo46jb" path="res://ui/pause.gdshader" id="12_os0ka"]
+[ext_resource type="Texture2D" uid="uid://dclba0hqtyk2w" path="res://ui/ControllerDiagram.png" id="13_x7jpl"]
+[ext_resource type="Texture2D" uid="uid://dxrms3gldu7wl" path="res://ui/ControllerDiagramBack.png" id="15_diyc5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tf0e0"]
+resource_local_to_scene = true
 shader = ExtResource("2_vkava")
 shader_parameter/ripple_radius = 0.0
 shader_parameter/ripple_strength = 0.03
 shader_parameter/ripple_thickness = 0.1
 shader_parameter/center_uv = Vector2(0.5, 0.5)
 shader_parameter/alpha = 0.0
+shader_parameter/tint_color = Color(0.121569, 0.709804, 0.921569, 1)
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("transition_rect", "healthbar", "dashbar", "darkness")]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_diyc5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x7jpl"]
+resource_local_to_scene = true
+shader = ExtResource("12_os0ka")
+shader_parameter/distortion_strength = 9.37
+shader_parameter/blur_strength = 3.5
+shader_parameter/viewport_size = Vector2(0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_os0ka"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mf2ns"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ju45i"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_74toj"]
+
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("transition_rect", "healthbar", "dashbar", "darkness", "complete_text_container", "return_container", "pause_container", "pause_panel", "resume_button")]
 script = ExtResource("1_1t8g0")
 transition_rect = NodePath("TransitionRect")
 healthbar = NodePath("MarginContainer/HealthBar")
 dashbar = NodePath("MarginContainer2/DashBar")
 darkness = NodePath("Darkness")
+complete_text_container = NodePath("CompleteTextContainer")
+return_container = NodePath("ReturnContainer")
+pause_container = NodePath("PauseContainer")
+pause_panel = NodePath("PauseContainer/Panel")
+resume_button = NodePath("PauseContainer/VBoxContainer/ResumeButton")
 
 [node name="Darkness" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -81,3 +118,178 @@ fill_mode = 3
 texture_under = ExtResource("5_bo1jx")
 texture_over = ExtResource("6_gycre")
 texture_progress = ExtResource("7_pa1oa")
+
+[node name="CompleteTextContainer" type="CenterContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -517.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 65.5)
+script = ExtResource("8_pa1oa")
+
+[node name="Label" type="Label" parent="CompleteTextContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.882353, 0.537255, 0.870588, 1)
+theme_override_colors/font_shadow_color = Color(0.67451, 0.254902, 0.729412, 1)
+theme_override_constants/shadow_offset_x = -4
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 75
+text = "Level Complete"
+horizontal_alignment = 1
+
+[node name="ReturnContainer" type="CenterContainer" parent="." node_paths=PackedStringArray("button")]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 505.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("10_bi8hs")
+button = NodePath("ReturnButton")
+
+[node name="ReturnButton" type="Button" parent="ReturnContainer"]
+texture_filter = 3
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_diyc5")
+text = "Return To Menu"
+icon = ExtResource("10_ay4pc")
+flat = true
+icon_alignment = 1
+
+[node name="PauseContainer" type="CenterContainer" parent="."]
+visible = false
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 301.0
+offset_top = 130.0
+offset_right = -301.0
+offset_bottom = -218.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="PauseContainer"]
+material = SubResource("ShaderMaterial_x7jpl")
+custom_minimum_size = Vector2(550, 300)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_os0ka")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ReturnButton" type="Button" parent="PauseContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mf2ns")
+text = "Return to Menu"
+icon = ExtResource("10_ay4pc")
+flat = true
+icon_alignment = 1
+
+[node name="RespawnButton" type="Button" parent="PauseContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ju45i")
+text = "Respawn"
+icon = ExtResource("12_hrmpd")
+flat = true
+icon_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_74toj")
+text = "Resume"
+icon = ExtResource("12_hrmpd")
+flat = true
+icon_alignment = 1
+
+[node name="ControlsDiagram" type="Sprite2D" parent="PauseContainer"]
+position = Vector2(10, 404.85)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("13_x7jpl")
+
+[node name="Label" type="Label" parent="PauseContainer/ControlsDiagram"]
+offset_left = 230.0
+offset_top = -50.0
+offset_right = 341.0
+offset_bottom = -16.6667
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 25
+text = "Dash"
+
+[node name="Label2" type="Label" parent="PauseContainer/ControlsDiagram"]
+offset_left = 164.0
+offset_top = -14.0
+offset_right = 275.0
+offset_bottom = 19.3333
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 25
+text = "Jump"
+
+[node name="Label3" type="Label" parent="PauseContainer/ControlsDiagram"]
+offset_left = -394.0
+offset_top = -42.0
+offset_right = -187.0
+offset_bottom = -8.66667
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 25
+text = "Move/Aim"
+
+[node name="ControlsDiagram2" type="Sprite2D" parent="PauseContainer"]
+position = Vector2(580, 404.85)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("15_diyc5")
+
+[node name="Label" type="Label" parent="PauseContainer/ControlsDiagram2"]
+offset_left = 145.333
+offset_top = -59.8
+offset_right = 256.333
+offset_bottom = -26.4667
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 25
+text = "Surface
+Lock"
+
+[node name="Label2" type="Label" parent="PauseContainer/ControlsDiagram2"]
+offset_left = -322.987
+offset_top = -59.8
+offset_right = -139.987
+offset_bottom = 9.86666
+theme_override_fonts/font = ExtResource("9_ay4pc")
+theme_override_font_sizes/font_size = 25
+text = "Surface
+Lock"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="ReturnContainer/ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="pressed" from="PauseContainer/VBoxContainer/ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="pressed" from="PauseContainer/VBoxContainer/RespawnButton" to="." method="_on_respawn_button_pressed"]
+[connection signal="pressed" from="PauseContainer/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]

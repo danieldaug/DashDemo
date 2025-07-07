@@ -108,7 +108,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_461ui"]
-size = Vector2(37, 37)
+size = Vector2(28, 28)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rpj3i"]
 radius = 15.0
@@ -134,7 +134,7 @@ collision_layer = 5
 collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/Hitbox"]
-position = Vector2(-14.5, 8.5)
+position = Vector2(-17, 11)
 shape = SubResource("RectangleShape2D_461ui")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
@@ -150,3 +150,12 @@ collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 shape = SubResource("CircleShape2D_s7u03")
+
+[node name="Contactbox" type="Area2D" parent="."]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Contactbox"]
+shape = SubResource("CircleShape2D_s7u03")
+
+[connection signal="body_entered" from="Contactbox" to="." method="_on_contact"]

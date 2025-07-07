@@ -2,15 +2,17 @@ extends Node2D
 class_name SquidBoss
 
 signal Died
+signal Started
 @export var player: Player
 @export var squid_body: SquidBody
 @export var arms: Array[SquidArm]
 @export var left_hitbox: Area2D
 @export var right_hitbox: Area2D
-@export var right_health: SquidHealth
-@export var left_health: SquidHealth
+@export var health: SquidHealth
 @export var attack_timer: Timer
 @export var state_timer: Timer
+@export var start_door: TileMapLayer
+@export var end_door: TileMapLayer
 
 var eyes_changed: int = 0
 var active_slaps: Dictionary = {}
@@ -36,6 +38,7 @@ var start_tantrum: bool = false
 var end_tantrum: bool = false
 var rotating_state: bool = false
 var reset_state: bool = false
+var started: bool = false
 
 # Constants
 const MIN_RANDOM_SLAP_WAIT: float = 0.75
@@ -77,13 +80,22 @@ func _ready():
             arms[i].switch_vertical()
         i += 1
     # Connections
+    if !player:
+        player = Global.player
     squid_body.player = player
+    health.squid_blood = squid_body.blood
     left_hitbox = squid_body.left_hitbox
     right_hitbox = squid_body.right_hitbox
-    left_hitbox.connect("body_entered", Callable(left_health, "hurt"))
-    right_hitbox.connect("body_entered", Callable(right_health, "hurt"))
+    left_hitbox.connect("body_entered", Callable(health, "hurt"))
+    right_hitbox.connect("body_entered", Callable(health, "hurt"))
+    self.connect("Started", Callable(start_door, "close"))
+    self.connect("Died", Callable(end_door, "open"))
 
 func _process(delta):
+    if !started:
+        Started.emit()
+        Global.sfx.play("boss_enter", global_position)
+        started = true
     # 1st stage state handling
     if eyes_changed == 0:
         if idle_state:
@@ -114,6 +126,13 @@ func _process(delta):
                     attack_timer.start(TANTRUM_SLAP_WAIT)
         elif rotating_state:
             _rotate(delta)
+    else:
+        if squid_body.on_floor:
+            if squid_body.global_position.y >= squid_body.origin.y + 2500:
+                queue_free()
+        else:
+            if squid_body.global_position.y <= squid_body.origin.y - 1500:
+                queue_free()
 
 func _idle():
     start_idle = true
@@ -186,25 +205,24 @@ func _reset():
     wave_slap_state = false
     _idle()
 
-func hurt(_is_right: bool):
+func hurt():
     squid_body.hurt()
 
-func change_eye(is_right: bool):
+func change_eye():
     _all_arms_reset()
     _reset()
-    hurt(is_right)
-    if is_right:
-        squid_body.right_eye_switch()
-    else:
-        squid_body.left_eye_switch()
-    if eyes_changed > 0:
+    if eyes_changed >= 1:
         die()
         return
+    hurt()
+    squid_body.right_eye_switch()
+    squid_body.left_eye_switch()
     eyes_changed += 1
     attack_timer.stop()
     state_timer.stop()
 
 func die():
+    Global.sfx.play("boss_leave", global_position)
     attack_timer.stop()
     state_timer.stop()
     rotating_state = false

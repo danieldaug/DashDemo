@@ -1,0 +1,236 @@
+[gd_scene load_steps=14 format=3 uid="uid://dyyos5mhy0gac"]
+
+[ext_resource type="Script" uid="uid://uql4rv7783e0" path="res://main/options_menu.gd" id="1_7mnio"]
+[ext_resource type="FontFile" uid="uid://diajd0v5fbtv0" path="res://main/Daydream.ttf" id="1_f2gv8"]
+[ext_resource type="Texture2D" uid="uid://dge0frgnrkk75" path="res://ui/MenuButton.png" id="2_xbd8w"]
+[ext_resource type="Texture2D" uid="uid://c3jncyfg7a1pk" path="res://main/HealthShell.png" id="3_47pcp"]
+[ext_resource type="PackedScene" uid="uid://pv4t2clbxi1y" path="res://util/underwater_panel.tscn" id="4_unmmf"]
+[ext_resource type="Script" uid="uid://0cafiv78idw8" path="res://main/button.gd" id="5_io8lq"]
+[ext_resource type="Shader" uid="uid://dhyn54t0veccu" path="res://ui/transition.gdshader" id="5_kc56f"]
+[ext_resource type="Texture2D" uid="uid://ymv3gavdxvkt" path="res://ui/MenuBg1.png" id="6_kc56f"]
+[ext_resource type="Texture2D" uid="uid://ns00yfcco1x1" path="res://ui/MenuBg2.png" id="7_47pcp"]
+[ext_resource type="Texture2D" uid="uid://dclba0hqtyk2w" path="res://ui/ControllerDiagram.png" id="9_1gdrb"]
+[ext_resource type="Texture2D" uid="uid://dxrms3gldu7wl" path="res://ui/ControllerDiagramBack.png" id="11_tvci7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvci7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dax2s"]
+shader = ExtResource("5_kc56f")
+shader_parameter/ripple_radius = 0.0
+shader_parameter/ripple_strength = 0.03
+shader_parameter/ripple_thickness = 0.1
+shader_parameter/center_uv = Vector2(0.5, 0.5)
+shader_parameter/alpha = 0.0
+shader_parameter/tint_color = Color(0.121569, 0.709804, 0.921569, 1)
+
+[node name="Options" type="Control" node_paths=PackedStringArray("transition_rect", "master_slider", "music_slider", "sfx_slider", "play_sfx_timer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7mnio")
+transition_rect = NodePath("TransitionRect")
+master_slider = NodePath("CenterContainer/VBoxContainer/MasterSlider/HSlider")
+music_slider = NodePath("CenterContainer/VBoxContainer/MusicSlider/HSlider")
+sfx_slider = NodePath("CenterContainer/VBoxContainer/SFXSlider/HSlider")
+play_sfx_timer = NodePath("CenterContainer/VBoxContainer/SFXSlider/PlaySfxTimer")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 235.0
+offset_top = 12.45
+offset_right = -235.0
+offset_bottom = -327.55
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="MasterSlider" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/MasterSlider"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Master"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/MasterSlider"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("3_47pcp")
+theme_override_icons/grabber_highlight = ExtResource("3_47pcp")
+value = 50.0
+
+[node name="MusicSlider" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/MusicSlider"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Music"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/MusicSlider"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("3_47pcp")
+theme_override_icons/grabber_highlight = ExtResource("3_47pcp")
+value = 50.0
+
+[node name="SFXSlider" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/SFXSlider"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "SFX"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/VBoxContainer/SFXSlider"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("3_47pcp")
+theme_override_icons/grabber_highlight = ExtResource("3_47pcp")
+value = 50.0
+
+[node name="PlaySfxTimer" type="Timer" parent="CenterContainer/VBoxContainer/SFXSlider"]
+one_shot = true
+
+[node name="ReturnContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -254.0
+offset_top = -373.0
+offset_right = 254.0
+offset_bottom = -179.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Button" type="Button" parent="ReturnContainer"]
+z_index = 1
+texture_filter = 3
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/icon_focus_color = Color(0.607843, 0.870588, 0.996078, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tvci7")
+text = "Return To Menu"
+icon = ExtResource("2_xbd8w")
+flat = true
+icon_alignment = 1
+script = ExtResource("5_io8lq")
+
+[node name="UnderwaterPanel" parent="." instance=ExtResource("4_unmmf")]
+
+[node name="TransitionRect" type="ColorRect" parent="."]
+z_index = 1
+material = SubResource("ShaderMaterial_dax2s")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MenuBg1" type="Sprite2D" parent="."]
+z_index = -1
+texture_filter = 3
+position = Vector2(580, 403)
+texture = ExtResource("6_kc56f")
+
+[node name="MenuBg2" type="Sprite2D" parent="."]
+texture_filter = 3
+position = Vector2(580, 403)
+texture = ExtResource("7_47pcp")
+
+[node name="ControlsDiagram" type="Sprite2D" parent="."]
+position = Vector2(310, 537.33)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("9_1gdrb")
+
+[node name="Label" type="Label" parent="ControlsDiagram"]
+offset_left = 230.0
+offset_top = -50.0
+offset_right = 341.0
+offset_bottom = -16.6667
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Dash"
+
+[node name="Label2" type="Label" parent="ControlsDiagram"]
+offset_left = 164.0
+offset_top = -14.0
+offset_right = 275.0
+offset_bottom = 19.3333
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Jump"
+
+[node name="Label3" type="Label" parent="ControlsDiagram"]
+offset_left = -394.0
+offset_top = -42.0
+offset_right = -187.0
+offset_bottom = -8.66667
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Move/Aim"
+
+[node name="ControlsDiagram2" type="Sprite2D" parent="."]
+position = Vector2(890, 537.33)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("11_tvci7")
+
+[node name="Label" type="Label" parent="ControlsDiagram2"]
+offset_left = 145.333
+offset_top = -59.8
+offset_right = 256.333
+offset_bottom = -26.4667
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Surface
+Lock"
+
+[node name="Label2" type="Label" parent="ControlsDiagram2"]
+offset_left = -322.987
+offset_top = -59.8
+offset_right = -139.987
+offset_bottom = 9.86666
+theme_override_fonts/font = ExtResource("1_f2gv8")
+theme_override_font_sizes/font_size = 25
+text = "Surface
+Lock"
+horizontal_alignment = 2
+
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/MasterSlider/HSlider" to="." method="master_value_changed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/MusicSlider/HSlider" to="." method="music_value_changed"]
+[connection signal="drag_ended" from="CenterContainer/VBoxContainer/SFXSlider/HSlider" to="." method="sfx_drag_ended"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/SFXSlider/HSlider" to="." method="sfx_value_changed"]
+[connection signal="timeout" from="CenterContainer/VBoxContainer/SFXSlider/PlaySfxTimer" to="." method="_on_play_sfx_timer_timeout"]
+[connection signal="pressed" from="ReturnContainer/Button" to="." method="_on_return_button_pressed"]

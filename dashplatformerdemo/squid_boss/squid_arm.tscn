@@ -1,9 +1,10 @@
-[gd_scene load_steps=52 format=3 uid="uid://c8cd3rc7x1888"]
+[gd_scene load_steps=54 format=3 uid="uid://c8cd3rc7x1888"]
 
 [ext_resource type="Script" uid="uid://d1hbf2gw4q5w1" path="res://squid_boss/squid_arm.gd" id="1_8ag4l"]
 [ext_resource type="Texture2D" uid="uid://d3wcagre5he2" path="res://squid_boss/SquidBossArm.png" id="1_ge6pj"]
+[ext_resource type="Shader" uid="uid://b8d6aipp6pnkj" path="res://shaders/blink.gdshader" id="1_uk2lv"]
 [ext_resource type="Texture2D" uid="uid://bhylpybymekcm" path="res://squid_boss/SquidBossHand.png" id="2_8ag4l"]
-[ext_resource type="Script" uid="uid://ddi73kagmb6c2" path="res://world/hurtbox.gd" id="4_hxim8"]
+[ext_resource type="Script" uid="uid://ddi73kagmb6c2" path="res://util/hurtbox.gd" id="4_hxim8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hxim8"]
 atlas = ExtResource("1_ge6pj")
@@ -125,6 +126,12 @@ animations = [{
 "name": &"turn_forward",
 "speed": 20.0
 }]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uk2lv"]
+resource_local_to_scene = true
+shader = ExtResource("1_uk2lv")
+shader_parameter/blink_color = Color(0.988283, 0.798491, 0.657372, 1)
+shader_parameter/blink_intensity = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rynrv"]
 atlas = ExtResource("2_8ag4l")
@@ -410,6 +417,7 @@ animation = &"forward"
 
 [node name="Hand" type="AnimatedSprite2D" parent="."]
 texture_filter = 3
+material = SubResource("ShaderMaterial_uk2lv")
 position = Vector2(0, -760)
 sprite_frames = SubResource("SpriteFrames_1lwy3")
 animation = &"unslap_forward"
@@ -421,12 +429,15 @@ frame_progress = 1.0
 zoom = Vector2(0.4, 0.4)
 
 [node name="FloorCollision" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorCollision"]
 position = Vector2(0, -725.5)
 shape = SubResource("RectangleShape2D_8ag4l")
 
 [node name="FloorHurtbox" type="Area2D" parent="."]
+visible = false
 collision_layer = 5
 collision_mask = 5
 monitoring = false
@@ -438,6 +449,7 @@ position = Vector2(0, -705.75)
 shape = SubResource("RectangleShape2D_hxim8")
 
 [node name="RoofHurtbox" type="Area2D" parent="."]
+visible = false
 position = Vector2(0, -730)
 collision_layer = 5
 collision_mask = 5

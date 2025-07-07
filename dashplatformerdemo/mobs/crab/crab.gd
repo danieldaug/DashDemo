@@ -18,7 +18,7 @@ var type_3_count: int = 0
 const MAX_PAUSE: float = 5.0
 const MIN_PAUSE: float = 3.0
 const MIN_ATTACK_TIME: float = 10.0
-const MAX_ATTACK_TIME: float = 20.0
+const MAX_ATTACK_TIME: float = 12.0
 const TYPE_1_PAUSE: float = 0.1
 const TYPE_2_PAUSE: float = 0.5
 const TYPE_3_PAUSE_1: float = 0.3
@@ -43,6 +43,7 @@ func _physics_process(_delta: float):
                 cur_bubble_type = attack_type
     elif start_attack:
         start_attack = false
+        Global.sfx.play("bubbles", global_position)
         bubble_attack(cur_bubble_type)
     elif attacking:
         if !sprite.is_playing():

@@ -31,6 +31,10 @@ func _physics_process(delta):
     rotation = move_toward(rotation, rotation + deg_to_rad(ROTATION_VELOCITY * 100), ROTATION_VELOCITY * delta)
     if player_contact:
         player.health_component.damage(1)
+        if player.health_component.health < 1:
+            player_contact = false
+            player.state_machine.states["OnSurface"].target_lock = Vector2.ZERO
+            player.state_machine.states["OnSurface"].surface_locked = false
 
 func on_hit(body: Node2D) -> void:
     if body is Player:
@@ -41,6 +45,7 @@ func on_hit(body: Node2D) -> void:
             hurtbox.queue_free()
             var tween = self.create_tween()
             tween.tween_method(reduce_blink, 1.0, 0.0, 1.0)
+            Global.sfx.play("mollusk_hit", global_position)
 
 func on_hurt(body: Node2D) -> void:
     if body is Player:
@@ -53,3 +58,8 @@ func stop_hurt(body: Node2D) -> void:
         
 func reduce_blink(new_val: float) -> void:
     sprite.material.set_shader_parameter("blink_intensity", new_val)
+
+func _on_contact(body):
+    if body is Player:
+        body.state_machine.states["OnSurface"].target_lock = global_position
+        body.state_machine.states["OnSurface"].surface_locked = true

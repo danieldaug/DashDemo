@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=3 uid="uid://delmx6et8h0y"]
+[gd_scene load_steps=25 format=3 uid="uid://delmx6et8h0y"]
 
 [ext_resource type="Script" uid="uid://dvjj6m2t3nqt6" path="res://player/player_refactor.gd" id="1_7pk6x"]
-[ext_resource type="Shader" uid="uid://1n7xiy3lthr2" path="res://shaders/player.gdshader" id="2_t1jsh"]
+[ext_resource type="Shader" uid="uid://1n7xiy3lthr2" path="res://shaders/blink_and_color.gdshader" id="2_t1jsh"]
 [ext_resource type="SpriteFrames" uid="uid://dj7ftgpdr0muu" path="res://player/PlayerSprite.tres" id="2_xup1p"]
+[ext_resource type="Texture2D" uid="uid://w05y0pvw8273" path="res://player/Aim.png" id="2_y2hfo"]
 [ext_resource type="Script" uid="uid://dfa14bmp0xcdt" path="res://player/bubble_collision.gd" id="3_mimk5"]
 [ext_resource type="Script" uid="uid://cnmjrjt8vmc28" path="res://player/FSM/state_machine.gd" id="4_xup1p"]
 [ext_resource type="Script" uid="uid://dmusriwtge4wt" path="res://player/FSM/on_surface.gd" id="5_mimk5"]
@@ -10,6 +11,7 @@
 [ext_resource type="Script" uid="uid://bfte5bnbpmhuv" path="res://player/FSM/off_surface.gd" id="6_fokt3"]
 [ext_resource type="Script" uid="uid://dmu2abybuxvrw" path="res://player/FSM/dashing.gd" id="7_lhj1m"]
 [ext_resource type="Script" uid="uid://cvo1l1dril8jj" path="res://player/animation_component_ref.gd" id="9_vwabj"]
+[ext_resource type="Script" uid="uid://fpsu10fbo1y7" path="res://player/tile_detection_component.gd" id="11_6m5vq"]
 
 [sub_resource type="Gradient" id="Gradient_1yjaq"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
@@ -48,7 +50,7 @@ shader_parameter/NEWCOLOR4 = Color(0.419608, 0.113725, 0.556863, 1)
 [sub_resource type="Gradient" id="Gradient_vwabj"]
 colors = PackedColorArray(1, 1, 1, 0.796078, 1, 1, 1, 0.121569)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_06mnu"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_t1jsh"]
 gradient = SubResource("Gradient_vwabj")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t1jsh"]
@@ -58,7 +60,7 @@ emission_box_extents = Vector3(10, 10, 1)
 direction = Vector3(0, -1, 0)
 gravity = Vector3(0, -44, 0)
 scale_max = 2.0
-color_ramp = SubResource("GradientTexture1D_06mnu")
+color_ramp = SubResource("GradientTexture1D_t1jsh")
 
 [sub_resource type="Gradient" id="Gradient_t1jsh"]
 colors = PackedColorArray(0.882353, 0.537255, 0.870588, 1, 0.882353, 0.537255, 0.870588, 0)
@@ -80,16 +82,25 @@ color_ramp = SubResource("GradientTexture1D_6m5vq")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6m5vq"]
 size = Vector2(30, 30)
 
-[node name="PlayerRefactor" type="CharacterBody2D" node_paths=PackedStringArray("camera", "sprite", "health_component", "state_machine", "dash_cooldown", "resaturated_fx")]
+[node name="PlayerRefactor" type="CharacterBody2D" node_paths=PackedStringArray("aim_sprite", "camera", "sprite", "health_component", "tile_detection_component", "state_machine", "dash_cooldown", "resaturated_fx")]
 collision_layer = 5
 collision_mask = 5
 script = ExtResource("1_7pk6x")
+aim_sprite = NodePath("Aim")
 camera = NodePath("Camera2D")
 sprite = NodePath("PlayerSprite")
 health_component = NodePath("Components/HealthComponent")
+tile_detection_component = NodePath("Components/TileDetectionComponent")
 state_machine = NodePath("StateMachine")
 dash_cooldown = NodePath("StateMachine/DashCooldownTimer")
 resaturated_fx = NodePath("PlayerSprite/Resaturated")
+
+[node name="Aim" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.639216)
+texture_filter = 3
+texture = ExtResource("2_y2hfo")
+offset = Vector2(32, 0)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -25)
@@ -152,10 +163,11 @@ states = {
 }
 animation_component = NodePath("../Components/AnimationComponent")
 
-[node name="OnSurface" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "coyote_timer")]
+[node name="OnSurface" type="Node" parent="StateMachine" node_paths=PackedStringArray("player", "coyote_timer", "surface_lock_timer")]
 script = ExtResource("5_mimk5")
 player = NodePath("../..")
 coyote_timer = NodePath("../CoyoteTimer")
+surface_lock_timer = NodePath("../SurfaceLockTimer")
 
 [node name="OffSurface" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("6_fokt3")
@@ -171,6 +183,9 @@ wait_time = 0.2
 one_shot = true
 
 [node name="DashCooldownTimer" type="Timer" parent="StateMachine"]
+one_shot = true
+
+[node name="SurfaceLockTimer" type="Timer" parent="StateMachine"]
 one_shot = true
 
 [node name="Components" type="Node" parent="."]
@@ -189,3 +204,7 @@ sprite = NodePath("../../PlayerSprite")
 bubble_particles = NodePath("../../PlayerSprite/Bubbles")
 on_surface_state = NodePath("../../StateMachine/OnSurface")
 off_surface_state = NodePath("../../StateMachine/OffSurface")
+
+[node name="TileDetectionComponent" type="Node" parent="Components" node_paths=PackedStringArray("player")]
+script = ExtResource("11_6m5vq")
+player = NodePath("../..")

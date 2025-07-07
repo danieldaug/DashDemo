@@ -17,6 +17,7 @@ func _ready():
 func damage(amount: float) -> void:
     if can_hurt:
         can_hurt = false
+        Global.sfx.play("hurt")
         health -= amount
         if health <= 0:
             player.respawn()
