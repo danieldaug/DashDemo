@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://3ih3dn0ur1rp"]
+[gd_scene load_steps=26 format=3 uid="uid://3ih3dn0ur1rp"]
 
 [ext_resource type="Texture2D" uid="uid://d0ogigjbcdgl5" path="res://util/TreasureChest.png" id="1_2dnty"]
 [ext_resource type="Script" uid="uid://d4hekjjnywt7u" path="res://util/treasure_chest.gd" id="1_cvk4d"]
@@ -150,9 +150,23 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2dnty"]
 size = Vector2(185.5, 275.5)
 
-[node name="TreasureChest" type="Node2D" node_paths=PackedStringArray("sprite")]
+[sub_resource type="Gradient" id="Gradient_cvk4d"]
+colors = PackedColorArray(1, 1, 1, 0.603922, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_akhpr"]
+gradient = SubResource("Gradient_cvk4d")
+width = 128
+fill = 1
+fill_from = Vector2(0.515837, 0.488688)
+fill_to = Vector2(1, 0.468326)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_cvk4d"]
+polygon = PackedVector2Array(-14, 2, -14, 10, 14, 10, 14, 2)
+
+[node name="TreasureChest" type="Node2D" node_paths=PackedStringArray("sprite", "light")]
 script = ExtResource("1_cvk4d")
 sprite = NodePath("AnimatedSprite2D")
+light = NodePath("PointLight2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 3
@@ -167,5 +181,20 @@ collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_2dnty")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+visible = false
+position = Vector2(0, 4)
+scale = Vector2(2.5, 2.5)
+energy = 0.9
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 5.0
+texture = SubResource("GradientTexture2D_akhpr")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+position = Vector2(0, 4)
+scale = Vector2(2, 2)
+occluder = SubResource("OccluderPolygon2D_cvk4d")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

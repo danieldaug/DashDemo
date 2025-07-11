@@ -55,7 +55,6 @@ func hurt(body):
 
 func reduce_blink(new_val: float) -> void:
     squid_boss.squid_body.body.material.set_shader_parameter("blink_intensity", new_val)
-    
 
 func _on_i_frame_timer_timeout():
     can_hurt = true

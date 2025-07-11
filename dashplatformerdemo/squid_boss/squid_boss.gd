@@ -127,12 +127,8 @@ func _process(delta):
         elif rotating_state:
             _rotate(delta)
     else:
-        if squid_body.on_floor:
-            if squid_body.global_position.y >= squid_body.origin.y + 2500:
-                queue_free()
-        else:
-            if squid_body.global_position.y <= squid_body.origin.y - 1500:
-                queue_free()
+        if squid_body.global_position.y >= squid_body.origin.y + 2500 or squid_body.global_position.y <= squid_body.origin.y - 1500:
+            queue_free()
 
 func _idle():
     start_idle = true

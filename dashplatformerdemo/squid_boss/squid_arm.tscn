@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://c8cd3rc7x1888"]
+[gd_scene load_steps=55 format=3 uid="uid://c8cd3rc7x1888"]
 
 [ext_resource type="Script" uid="uid://d1hbf2gw4q5w1" path="res://squid_boss/squid_arm.gd" id="1_8ag4l"]
 [ext_resource type="Texture2D" uid="uid://d3wcagre5he2" path="res://squid_boss/SquidBossArm.png" id="1_ge6pj"]
@@ -381,6 +381,9 @@ size = Vector2(136, 126.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uk2lv"]
 size = Vector2(136, 107.5)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uk2lv"]
+polygon = PackedVector2Array(52, 0, 52, -645, 67, -710, 64, -773, 42, -805, 1, -824, -38, -807, -64, -774, -67, -707, -52, -643, -52, 638, 52, 638, 52, 0)
+
 [node name="SquidArm" type="Node2D" node_paths=PackedStringArray("arm_sprites", "hand_sprite", "floor_hurtbox", "roof_hurtbox", "charge_timer")]
 script = ExtResource("1_8ag4l")
 arm_sprites = [NodePath("ArmSprites/ArmSprite"), NodePath("ArmSprites/ArmSprite2"), NodePath("ArmSprites/ArmSprite3"), NodePath("ArmSprites/ArmSprite4")]
@@ -462,6 +465,9 @@ shape = SubResource("RectangleShape2D_uk2lv")
 
 [node name="ChargeTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_uk2lv")
 
 [connection signal="body_entered" from="FloorCollision" to="." method="_on_floor_collision_body_entered"]
 [connection signal="body_entered" from="FloorHurtbox" to="FloorHurtbox" method="_on_area_2d_body_entered"]

@@ -173,6 +173,7 @@ func slap():
 
 func vertical_slap():
     idling = false
+    slapping = false
     vertical_slapping = true
     if is_forward:
         hand_sprite.play("slap_forward")
@@ -233,6 +234,8 @@ func reset():
     vertical_slapping = false
     slapping = false
     resetting = true
+    shaking = false
+    idling = false
     if is_forward:
         floor_hurtbox.set_deferred("monitoring", false)
         floor_hurtbox.set_deferred("monitorable", false)

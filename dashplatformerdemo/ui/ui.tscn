@@ -48,29 +48,16 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_74toj"]
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("transition_rect", "healthbar", "dashbar", "darkness", "complete_text_container", "return_container", "pause_container", "pause_panel", "resume_button")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("transition_rect", "healthbar", "dashbar", "complete_text_container", "return_container", "pause_container", "pause_panel", "resume_button")]
 script = ExtResource("1_1t8g0")
 transition_rect = NodePath("TransitionRect")
 healthbar = NodePath("MarginContainer/HealthBar")
 dashbar = NodePath("MarginContainer2/DashBar")
-darkness = NodePath("Darkness")
 complete_text_container = NodePath("CompleteTextContainer")
 return_container = NodePath("ReturnContainer")
 pause_container = NodePath("PauseContainer")
 pause_panel = NodePath("PauseContainer/Panel")
 resume_button = NodePath("PauseContainer/VBoxContainer/ResumeButton")
-
-[node name="Darkness" type="ColorRect" parent="."]
-modulate = Color(1, 1, 1, 0)
-z_index = 2
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
 
 [node name="TransitionRect" type="ColorRect" parent="."]
 z_index = 1

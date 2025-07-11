@@ -57,18 +57,22 @@ animations = [{
 radius = 55.0
 height = 166.0
 
-[sub_resource type="Gradient" id="Gradient_dv2g1"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+[sub_resource type="Gradient" id="Gradient_ml1g0"]
+offsets = PackedFloat32Array(0, 0.987261)
+colors = PackedColorArray(0.562958, 0.562958, 0.562958, 0.701961, 0.56, 0.56, 0.56, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ml1g0"]
-gradient = SubResource("Gradient_dv2g1")
+gradient = SubResource("Gradient_ml1g0")
+width = 320
+height = 320
 fill = 1
 fill_from = Vector2(0.515909, 0.479545)
-fill_to = Vector2(0.845455, 0.186364)
+fill_to = Vector2(1, 0.477376)
 
-[node name="BigJellyfish" type="Node2D" node_paths=PackedStringArray("sprite")]
+[node name="BigJellyfish" type="Node2D" node_paths=PackedStringArray("sprite", "light")]
 script = ExtResource("1_ml1g0")
 sprite = NodePath("AnimatedSprite2D")
+light = NodePath("PointLight2D2")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_e8w5k")
@@ -84,9 +88,15 @@ position = Vector2(0, -6.06)
 shape = SubResource("CapsuleShape2D_cctsm")
 
 [node name="PointLight2D2" type="PointLight2D" parent="."]
+light_mask = 3
+visibility_layer = 3
 position = Vector2(0, -30.48)
-scale = Vector2(1.5, 1.5)
-energy = 0.86
+scale = Vector2(2, 2)
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 5.0
+shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_ml1g0")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

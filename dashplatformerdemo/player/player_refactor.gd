@@ -114,15 +114,19 @@ func aim_ui() -> void:
         aim_sprite.visible = false
 
 func change_saturation_1(color_value: Color) -> void:
+    return
     sprite.material.set_shader_parameter(COLOR_PARAMETERS[0], color_value)
 
 func change_saturation_2(color_value: Color) -> void:
+    return
     sprite.material.set_shader_parameter(COLOR_PARAMETERS[1], color_value)
 
 func change_saturation_3(color_value: Color) -> void:
+    return
     sprite.material.set_shader_parameter(COLOR_PARAMETERS[2], color_value)
 
 func change_saturation_4(color_value: Color) -> void:
+    return
     sprite.material.set_shader_parameter(COLOR_PARAMETERS[3], color_value)
 
 func desaturate():

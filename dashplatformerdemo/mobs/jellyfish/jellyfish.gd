@@ -1,8 +1,25 @@
 extends Node2D
 
 @export var sprite: AnimatedSprite2D
+@export var light: PointLight2D
 var player: Player
 var entered: bool = false
+@onready var max_glow: float = light.energy
+var dimming: bool = true
+
+# Constants
+const GLOW_VAR: float = 0.75
+const BLINK_SPEED: float = 0.5
+
+func _process(delta):
+    if dimming:
+        light.energy -= BLINK_SPEED * delta
+        if light.energy <= max_glow - GLOW_VAR:
+            dimming = false
+    else:
+        light.energy += BLINK_SPEED * delta
+        if light.energy >= max_glow:
+            dimming = true
 
 func _on_area_2d_body_entered(body):
     if !entered and body is Player:

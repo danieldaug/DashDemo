@@ -4,7 +4,6 @@ class_name UI
 @export var transition_rect: ColorRect
 @export var healthbar: TextureProgressBar
 @export var dashbar: TextureProgressBar
-@export var darkness: ColorRect
 @export var complete_text_container: CenterContainer
 @export var return_container: CenterContainer
 @export var pause_container: CenterContainer
@@ -67,7 +66,7 @@ func set_alpha(a: float) -> void:
 func _on_return_button_pressed():
     pause_container.visible = false
     await fade_out(false)
-    Global.player.last_spawn = Vector2(-100, -15)
+    Global.player = null
     if not Global.main_menu:
         print("Error no menu!")
     SceneScript.switch_scene(Global.main_menu)

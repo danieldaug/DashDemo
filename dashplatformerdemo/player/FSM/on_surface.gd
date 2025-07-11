@@ -38,7 +38,7 @@ const ACCEL_Y: float = 700.0
 const JUMP_FORCE: float = 600.0
 const LOCK_GRAV: float = 7.5
 const LOCK_ROTATION_SPEED: float = 45.0
-const LOCK_ENTRY_DELAY: float = 0.1
+const LOCK_ENTRY_DELAY: float = 0.15
 
 func wall_physics(delta):
     var cur_pos = player.global_position.x

@@ -750,7 +750,7 @@ animations = [{
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vjexb"]
 shader = ExtResource("8_t4qb7")
-shader_parameter/blinking = true
+shader_parameter/blinking = false
 shader_parameter/blink_color = Color(1, 1, 1, 1)
 shader_parameter/blink_intensity = 0.0
 shader_parameter/OLDCOLOR1 = Color(0.619608, 0.690196, 0.72549, 1)
@@ -1011,7 +1011,7 @@ blood = NodePath("BloodParticles")
 ink = NodePath("InkParticles")
 
 [node name="Eyeballs" type="AnimatedSprite2D" parent="."]
-light_mask = 2
+light_mask = 4
 texture_filter = 3
 sprite_frames = SubResource("SpriteFrames_v8031")
 animation = &"death"
@@ -1021,7 +1021,7 @@ frame_progress = 0.73486
 
 [node name="LeftEyeballDamaged" type="AnimatedSprite2D" parent="."]
 visible = false
-light_mask = 2
+light_mask = 4
 texture_filter = 3
 sprite_frames = SubResource("SpriteFrames_15k8d")
 animation = &"death"
@@ -1030,7 +1030,7 @@ frame_progress = 0.975046
 
 [node name="RightEyeDamaged" type="AnimatedSprite2D" parent="."]
 visible = false
-light_mask = 2
+light_mask = 4
 sprite_frames = SubResource("SpriteFrames_6ovkn")
 animation = &"death"
 autoplay = "default"
@@ -1073,7 +1073,7 @@ texture = ExtResource("3_kbc75")
 position = Vector2(-155.5, 441)
 scale = Vector2(1.01562, 1.5)
 energy = 0.62
-range_item_cull_mask = 2
+range_item_cull_mask = 4
 texture = SubResource("GradientTexture2D_vjexb")
 
 [node name="PointLight2D2" type="PointLight2D" parent="."]
@@ -1081,7 +1081,7 @@ light_mask = 2
 position = Vector2(155.5, 441)
 scale = Vector2(1.01562, 1.5)
 energy = 0.62
-range_item_cull_mask = 2
+range_item_cull_mask = 4
 texture = SubResource("GradientTexture2D_vjexb")
 
 [node name="Eyelids" type="AnimatedSprite2D" parent="."]

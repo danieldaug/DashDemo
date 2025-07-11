@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var sprite: AnimatedSprite2D
+@export var light: PointLight2D
 var opening: bool = false
 
 func _process(_delta):
@@ -20,3 +21,4 @@ func _on_area_2d_body_entered(body):
         Global.ui.complete_text_container.appear()
         Global.ui.return_container.appear()
         Global.sfx.play("level_complete")
+        light.visible = true

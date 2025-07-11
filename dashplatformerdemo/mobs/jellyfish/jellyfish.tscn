@@ -82,17 +82,20 @@ radius = 32.0
 height = 86.84
 
 [sub_resource type="Gradient" id="Gradient_dv2g1"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+colors = PackedColorArray(0.550958, 0.550959, 0.550958, 0.392157, 0.55, 0.55, 0.55, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_0cohq"]
 gradient = SubResource("Gradient_dv2g1")
+width = 160
+height = 160
 fill = 1
 fill_from = Vector2(0.515909, 0.479545)
-fill_to = Vector2(0.845455, 0.186364)
+fill_to = Vector2(1, 0.470588)
 
-[node name="Jellyfish" type="Node2D" node_paths=PackedStringArray("sprite")]
+[node name="Jellyfish" type="Node2D" node_paths=PackedStringArray("sprite", "light")]
 script = ExtResource("1_lyi7v")
 sprite = NodePath("AnimatedSprite2D")
+light = NodePath("PointLight2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 3
@@ -111,7 +114,11 @@ shape = SubResource("CapsuleShape2D_y0qvs")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 position = Vector2(0, 1.5)
-scale = Vector2(1, 1.57812)
+scale = Vector2(3, 3)
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 5.0
+shadow_item_cull_mask = 3
 texture = SubResource("GradientTexture2D_0cohq")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
